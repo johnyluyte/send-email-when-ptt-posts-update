@@ -31,6 +31,10 @@ $("document").ready(function(){
       url: "response.php", //Relative or absolute path to response.php file
       data: data,
       success: function(data) {
+        if(data["error"]!=null){
+          alert_error(data["error"]);
+          return;
+        }
         $(".the-return").html(
           // data
           "ptt_url: " + data["ptt_url"] +

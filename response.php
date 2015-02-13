@@ -11,8 +11,6 @@ if (is_ajax()) {
 }
 
 
-
-
 //Function to check if the request is an AJAX request
 function is_ajax() {
   return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
@@ -22,12 +20,10 @@ function is_ajax() {
 function get_article_title(){
   $url = $_POST["ptt_url"];
 
-  if(url_is_valid($url)=="false"){
+  $content = url_is_valid($url);
+  if($content=="false"){
     // TODO echo alert when 404
-    $post_data = array('ptt_title' => 'error not valid!!!',
-        'K_A' => 'asadasdas'
-    );
-    echo json_encode($post_data);
+    echo json_encode(array('error' => 'An error occurred when parsing the url. (404 page not found)'));
     return;
   }
 
