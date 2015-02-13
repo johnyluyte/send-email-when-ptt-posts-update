@@ -1,17 +1,25 @@
+function alert_error(msg){
+  console.log(msg);
+  alert(msg);
+}
+
 $("document").ready(function(){
   $("#myForm").submit(function(){
     // Check if the URL is REGEX correct (http(s)://www.ptt.cc/bbs/*).
     var url = $("#ptt_url").val();
     ptt_regex = /http[s]?:\/\/www.ptt.cc\/bbs\/*/;
-
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
     if(url.match(ptt_regex)==null){
-      var error_invalid_url = "Error: Invalid URL! \n批踢踢文章網址錯誤。 ";
-      console.log(error_invalid_url);
-      alert(error_invalid_url);
+      alert_error("Error: Invalid URL! \n批踢踢文章網址錯誤。");
       return false;
     }
 
+    // We uses input type="email" so the browser will check the syntax of the e-mail for us.
+    // However, we still need to check if the e-mail is empty.
+    if($("#email").val()==''){
+      alert_error("Error: Invalid E-mail! \n電子郵件欄位不可為空白");
+      return false;
+    }
 
     var data = {
       "action": "get_article_title"

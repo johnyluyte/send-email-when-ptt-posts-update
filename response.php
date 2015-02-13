@@ -22,10 +22,8 @@ function is_ajax() {
 function get_article_title(){
   $url = $_POST["ptt_url"];
 
-url_is_valid($url);
-
-/*
   if(url_is_valid($url)=="false"){
+    // TODO echo alert when 404
     $post_data = array('ptt_title' => 'error not valid!!!',
         'K_A' => 'asadasdas'
     );
@@ -36,7 +34,7 @@ url_is_valid($url);
   $return = $_POST;
   $return["json"] = json_encode($return);
   echo json_encode($return);
-  */
+
 }
 
 
@@ -49,31 +47,19 @@ function url_is_valid($url){
   curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
   curl_setopt($handle, CURLINFO_HEADER_OUT, true);
 
-
   /* Get the HTML or whatever is linked in $url. */
   $response = curl_exec($handle);
-
 
   /* Check for 404 (file not found).
      https://stackoverflow.com/questions/408405/easy-way-to-test-a-url-for-404-in-php
      https://stackoverflow.com/questions/10227879/php-curl-http-code-return-0
+     https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
   */
   $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-  $errr = curl_error($handle);
-  $post_data = array('http_code' => $httpCode,
-    'errr' => $errr,
-    'ptt_url' => $url,
-    'K_A' => 'asadasdas'
-  );
-  echo json_encode($post_data);
-
   if($httpCode == 404) {
       /* Handle 404 here. */
-      return;
-
-      // return "false";
+      return "false";
   }
-  // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 
   /*switch($httpCode) {
       case 404:

@@ -2,8 +2,6 @@
 
 ## Todo Lists
 
-- TODO: E-mail 欄位不可為空
-- 如果 URL 不存在或是格是錯誤，要能 handle error，不要整個當掉
 - 按下去之後，會先測試 URL 是否合理，並抓出文章標題顯示出來，
 - need to cancel unfinished(old) AJAX when submit new AJAX
 - 郵件：有人回覆了[問題]有沒有XXX的八卦
