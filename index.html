@@ -3,11 +3,10 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Pie Chart</title>
+  <title>send-email-when-ptt-posts-update</title>
   <link rel="stylesheet" type="text/css" href="lib/bootstrap/darkly.min.css">
   <link rel="stylesheet" type="text/css" href="index.css">
 </head>
-
 
 <body>
   <div class="container">
@@ -16,7 +15,6 @@
       <!-- Left Area -->
       <div class="col-md-12">
         <div id="div-leftleArea">
-
 
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -48,8 +46,7 @@
 
                 <div class="col-md-4">
                   上次檢查：Thu Jan 22 21:10:38 2015
-                  <br>
-                  距離停止檢查尚餘：7日
+                  <br> 距離停止檢查尚餘：7日
                   <br>
                   <button class="btn btn-info btn-sm">立即檢查是否有新留言</button>
                   <br>
@@ -58,25 +55,24 @@
               </div>
               <hr>
               <a target="_blank" href="https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html</a>
-              <br>
-              這邊可以插入文章內容預覽（引用文部分怎麼辦？）
+              <br> 這邊可以插入文章內容預覽（引用文部分怎麼辦？）
             </div>
             <!-- /.panel-body -->
           </div>
           <!-- /.panel panel-default -->
 
-          <form action="">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                新增一筆新的資料
-              </div>
-              <div class="panel-body">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              新增一筆新的資料
+            </div>
+            <div class="panel-body">
+              <form id="myForm" method="post" accept-charset="utf-8">
                 <label class="control-label" for="inputDefault">新增批踢踢文章網址</label>
                 <!-- <input type="text" class="form-control" id="inputDefault" placeholder="例如：https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html"> -->
-                <input type="text" size="70" placeholder="例如：https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">
+                <input type="text" id="ptt_url" name="ptt_url" size="70" placeholder="例如：https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">
                 <br>
                 <label class="control-label" for="inputDefault">每隔</label>
-                <select style="color:black" id="select">
+                <select style="color:black" id="select" name="check_hour_period">
                   <option>0.5</option>
                   <option>1</option>
                   <option>6</option>
@@ -85,7 +81,7 @@
                 </select>
                 小時檢查一次該文章是否有新留言，
                 <label class="control-label" for="inputDefault">持續：</label>
-                <select style="color:black" id="select">
+                <select style="color:black" id="select" name="check_total_days">
                   <option>1</option>
                   <option>5</option>
                   <option>7</option>
@@ -94,14 +90,18 @@
                 </select>
                 天。
                 <br> 若有新留言，請寄電子郵件至
-                <input type="email" size="70" placeholder="abc@example.com">
+                <input type="email" name="email" size="70" placeholder="abc@example.com">
                 <br>
                 <!-- <input type="submit"> -->
                 <!-- <button type="button" id="btn-addNewEvent" class="btn btn-primary">Add new Event</button> -->
                 <input type="submit" id="btn-addNewEvent" class="btn btn-primary" value="Add new Event">
-              </div>
+              </form>
             </div>
-          </form>
+          </div>
+
+          <div class="the-return">
+            [HTML is replaced when successful.]
+          </div>
 
 
         </div>
