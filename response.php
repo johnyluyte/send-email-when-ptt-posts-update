@@ -118,5 +118,38 @@ function mainJob(){
 }
 
 
+function save_to_database(){
+  $db_configs_json = file_get_contents("db_config.json");
+  $db_configs      = json_decode($db_configs_json, true);
+  $servername      = $db_configs['servername'];
+  $dbname          = $db_configs['dbname'];
+  $username        = $db_configs['username'];
+  $password        = $db_configs['password'];
+
+  try {
+    // Open a Connection to MySQL
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn->exec("SET NAMES 'utf8';");
+    echo "Connected successfully";
+
+    $sql =
+    "INSERT INTO main_table (url, title, author, board, published_date, add_date, expire_date, period, email, last_check, remaining, last_push)
+      VALUES ('https://www.ptt.cc/bbs/C_Chat/M.1439347442.A.0A.html', '安安標題', '安安作者', '安安版', 'Wed Aug 12 10:43:59 2015', 'Wed Aug   20 10:43:59 2015', 'Wed Aug 21 10:43:59 2015', '1', 'johnyluyte@gmail.com', 'none', '7', '推 ithil1: 喜歡+1 黑長直+短裙就是正義 08/12   11:05')";
+
+    // use exec() because no results are returned
+    $conn->exec($sql);
+    echo "New record created successfully";
+
+    }
+  catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
+
+  // Close the Connection
+  $conn = null;
+}
 
 ?>
