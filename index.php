@@ -14,11 +14,62 @@
       <div class="col-md-12">
 
         <!-- 目前現有的資料(從資料庫讀取) -->
+        <?php
+          $db_configs_json = file_get_contents("db_config.json");
+          $db_configs      = json_decode($db_configs_json, true);
+          $servername      = $db_configs['servername'];
+          $dbname          = $db_configs['dbname'];
+          $username        = $db_configs['username'];
+          $password        = $db_configs['password'];
+
+          try {
+            // Open a Connection to MySQL
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->exec("SET NAMES 'utf8';");
+
+            $sql = "SELECT * FROM main_table";
+            foreach ($conn->query($sql) as $row) {
+              create_panel($row);
+            }
+          }
+          catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+          }
+          $conn = null;
+
+
+          function create_panel($row){
+            echo '<div class="panel panel-default"><div class="panel-heading">';
+            echo '<button class="btn btn-danger btn-xs">刪除這筆資料</button>';
+            echo '&nbsp;&nbsp;&nbsp;';
+            echo '<a target="_blank" href="' . $row['url'] . '">' . $row['url'] . '</a>';
+            echo '</div><div class="panel-body"><div class="row"><div class="col-md-4">';
+            echo '標題：' . $row['title'];
+            echo '<br> 作者：' . $row['author'];
+            echo '<br> 看板：' . $row['board'];
+            echo '<br> 發文日期：' . $row['published_date'];
+            echo '<br></div><div class="col-md-4">';
+            echo '加入日期：' . $row['add_date'];
+            echo '<br> 距離停止檢查尚餘：' . $row['remaining'] . ' 天';
+            echo '<br> 每隔多久檢查是否有新留言：' . $row['period'] . ' 小時';
+            echo '<br> 將新留言通知寄至：' . $row['email'];
+            echo '<br></div><div class="col-md-4">';
+            echo '上次檢查：' . $row['last_check'];
+            echo '<br><br><button class="btn btn-info btn-sm">立即檢查是否有新留言</button><br></div></div><hr>';
+            echo '最新推文：' . $row['last_push'];
+            echo '<br></div></div>';
+          }
+        ?>
+
+
+
         <div class="panel panel-default">
             <div class="panel-heading">
-              <a target="_blank" href="https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html</a>
-              &nbsp;&nbsp;&nbsp;
               <button class="btn btn-danger btn-xs">刪除這筆資料</button>
+              &nbsp;&nbsp;&nbsp;
+              <a target="_blank" href="https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html</a>
             </div>
             <div class="panel-body">
               <div class="row">
@@ -32,7 +83,7 @@
 
                 <div class="col-md-4">
                   加入日期：Thu Jan 22 21:10:38 2015
-                  <br> 距離停止檢查尚餘：7日
+                  <br> 距離停止檢查尚餘：7 天
                   <br> 每隔多久檢查是否有新留言：1 小時
                   <br> 將新留言通知寄至：johnyluyte@gmail.com
                   <br>
@@ -47,10 +98,8 @@
                 </div>
               </div>
               <hr>
-              最後一篇推文：
-              <br> 這邊可以插入文章內容預覽（引用文部分怎麼辦？）
+              最後推文：好好喔~~<br>
             </div>
-            <!-- /.panel-body -->
         </div>
 
         <!-- 新增新的一筆資料 -->
