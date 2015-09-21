@@ -11,27 +11,21 @@
 <body>
   <div class="container">
     <div class="row">
-
-      <!-- Left Area -->
       <div class="col-md-12">
-        <div id="div-leftleArea">
 
-          <div class="panel panel-default">
+        <!-- 目前現有的資料(從資料庫讀取) -->
+        <div class="panel panel-default">
             <div class="panel-heading">
-              <div class="row">
-                <div class="col-md-10">
-                  <button class="btn btn-danger btn-xs">刪除這筆資料</button>
-                </div>
-                <div class="col-md-2">
-                </div>
-              </div>
+              <a target="_blank" href="https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html</a>
+              &nbsp;&nbsp;&nbsp;
+              <button class="btn btn-danger btn-xs">刪除這筆資料</button>
             </div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-4">
                   標題：Re: [心情] 外貌很重要
-                  <br> 看板：Boy-Girl
                   <br> 作者：mrp (小生)
+                  <br> 看板：Boy-Girl
                   <br> 發文日期：Thu Jan 22 21:10:38 2015
                   <br>
                 </div>
@@ -51,17 +45,16 @@
                   <button class="btn btn-info btn-sm">立即檢查是否有新留言</button>
                   <br>
                 </div>
-
               </div>
               <hr>
-              <a target="_blank" href="https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html</a>
+              最後一篇推文：
               <br> 這邊可以插入文章內容預覽（引用文部分怎麼辦？）
             </div>
             <!-- /.panel-body -->
-          </div>
-          <!-- /.panel panel-default -->
+        </div>
 
-          <div class="panel panel-default">
+        <!-- 新增新的一筆資料 -->
+        <div class="panel panel-default">
             <div class="panel-heading">
               新增一筆新的資料
             </div>
@@ -69,7 +62,7 @@
               <form id="myForm" method="post" accept-charset="utf-8">
                 <label class="control-label" for="inputDefault">新增批踢踢文章網址</label>
                 <!-- <input type="text" class="form-control" id="inputDefault" placeholder="例如：https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html"> -->
-                <input type="text" id="ptt_url" name="ptt_url" size="70" placeholder="例如：https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">
+                <input type="text" id="check_ptt_url" name="check_ptt_url" size="70" placeholder="例如：https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">
                 <br>
                 <label class="control-label" for="inputDefault">每隔</label>
                 <select style="color:black" id="select" name="check_hour_period">
@@ -97,18 +90,14 @@
                 <input type="submit" id="btn-addNewEvent" class="btn btn-primary" value="Add new Event">
               </form>
             </div>
-          </div>
-
-          <div class="the-return">
-            [HTML is replaced when successful.]
-          </div>
-
-
         </div>
+
+        <div id="the-return" class="alert alert-dismissible alert-success">
+            [HTML is replaced when successful.]
+        </div>
+
       </div>
       <!-- /.col-md-12 -->
-      <!-- Right Area -->
-      <!-- <div class="col-md-4"></div> -->
     </div>
     <!-- Row -->
   </div>
