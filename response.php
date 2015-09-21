@@ -97,8 +97,8 @@ function mainJob(){
   $article_date = get_next_article_metadata($content, strpos($content, $article_title));
 
   // 抓出最後一篇推文
-  $postLastPushStart = strrpos($content, "push-tag") + 10;
-  $postLastPushEnd = strrpos($content, "</span></div></div>", $postLastPushStart);
+  $postLastPushStart = strrpos($content, "push-content") + 16;
+  $postLastPushEnd = strrpos($content, "</span><span", $postLastPushStart);
   $article_last_push = substr($content, $postLastPushStart, ($postLastPushEnd-$postLastPushStart) );
 
   // 建立回傳的 JSON 物件
@@ -109,16 +109,19 @@ function mainJob(){
   $return["article_date"] = $article_date;
   $return["article_last_push"] = $article_last_push;
 
+  $return["add_date"] = $article_last_push;
+
+  $return["message"] = save_to_database($return);
+
   // 回傳 AJAX
   echo json_encode($return);
 
   // TODO: 存到 Database 裡面
 
-
 }
 
 
-function save_to_database(){
+function save_to_database($data){
   $db_configs_json = file_get_contents("db_config.json");
   $db_configs      = json_decode($db_configs_json, true);
   $servername      = $db_configs['servername'];
@@ -126,30 +129,44 @@ function save_to_database(){
   $username        = $db_configs['username'];
   $password        = $db_configs['password'];
 
+  $debug_message = "";
   try {
     // Open a Connection to MySQL
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->exec("SET NAMES 'utf8';");
-    echo "Connected successfully";
+    $debug_message = "Connected successfully";
 
     $sql =
-    "INSERT INTO main_table (url, title, author, board, published_date, add_date, expire_date, period, email, last_check, remaining, last_push)
-      VALUES ('https://www.ptt.cc/bbs/C_Chat/M.1439347442.A.0A.html', '安安標題', '安安作者', '安安版', 'Wed Aug 12 10:43:59 2015', 'Wed Aug   20 10:43:59 2015', 'Wed Aug 21 10:43:59 2015', '1', 'johnyluyte@gmail.com', 'none', '7', '推 ithil1: 喜歡+1 黑長直+短裙就是正義 08/12   11:05')";
+    "INSERT INTO main_table (url, title, author, board, published_date, period, email, last_check, remaining, last_push)
+      VALUES ('" .
+        $data['check_ptt_url'] ."', '" .
+        $data['article_title'] . "',  '" .
+        $data['article_author'] . "',  '" .
+        $data['article_board'] . "',  '" .
+        $data['article_date'] . "',  '" .
+        // $data[''] . "',  '" .
+        $data['check_period'] . "',  '" .
+        $data['email'] . "',  '" .
+        $data['None'] . "',  '" .
+        $data['check_persist_days'] . "',  '" .
+        $data['article_last_push'] . "')";
 
     // use exec() because no results are returned
     $conn->exec($sql);
-    echo "New record created successfully";
+    $debug_message = "New record created successfully";
 
     }
   catch(PDOException $e)
     {
-    echo "Connection failed: " . $e->getMessage();
+    $debug_message = "Connection failed: " . $e->getMessage();
     }
 
   // Close the Connection
   $conn = null;
+
+  return $debug_message;
 }
 
 ?>

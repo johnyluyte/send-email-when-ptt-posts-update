@@ -1,5 +1,9 @@
 # send-email-when-ptt-posts-update
 
+## Info
+
+- 「監控日期」每天台灣時間(UTC +8)午夜 12 點會減 1，我的伺服器使用 MDT (UTC -6)時間。
+
 ## Todo Lists
 
 - 按下去之後，會先測試 URL 是否合理，並抓出文章標題顯示出來，

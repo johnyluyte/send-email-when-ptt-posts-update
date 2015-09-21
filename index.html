@@ -32,7 +32,7 @@
 
                 <div class="col-md-4">
                   加入日期：Thu Jan 22 21:10:38 2015
-                  <br> 結束日期：Thu Jan 29 21:10:38 2015
+                  <br> 距離停止檢查尚餘：7日
                   <br> 每隔多久檢查是否有新留言：1 小時
                   <br> 將新留言通知寄至：johnyluyte@gmail.com
                   <br>
@@ -40,7 +40,7 @@
 
                 <div class="col-md-4">
                   上次檢查：Thu Jan 22 21:10:38 2015
-                  <br> 距離停止檢查尚餘：7日
+                  <br>
                   <br>
                   <button class="btn btn-info btn-sm">立即檢查是否有新留言</button>
                   <br>
@@ -60,13 +60,12 @@
             </div>
             <div class="panel-body">
               <form id="myForm" method="post" accept-charset="utf-8">
-                <label class="control-label" for="inputDefault">新增批踢踢文章網址</label>
+                <label class="control-label" for="inputDefault">新增批踢踢文章網址：</label>
                 <!-- <input type="text" class="form-control" id="inputDefault" placeholder="例如：https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html"> -->
-                <input type="text" id="check_ptt_url" name="check_ptt_url" size="70" placeholder="例如：https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">
+                <input type="text" id="check_ptt_url" name="check_ptt_url" size="70" placeholder=" https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">
                 <br>
                 <label class="control-label" for="inputDefault">每隔</label>
-                <select style="color:black" id="select" name="check_hour_period">
-                  <option>0.5</option>
+                <select style="color:black" id="select" name="check_period">
                   <option>1</option>
                   <option>6</option>
                   <option>12</option>
@@ -74,16 +73,16 @@
                 </select>
                 小時檢查一次該文章是否有新留言，
                 <label class="control-label" for="inputDefault">持續：</label>
-                <select style="color:black" id="select" name="check_total_days">
+                <select style="color:black" id="select" name="check_persist_days">
                   <option>1</option>
+                  <option>3</option>
                   <option>5</option>
                   <option>7</option>
                   <option>14</option>
-                  <option>31</option>
                 </select>
                 天。
-                <br> 若有新留言，請寄電子郵件至
-                <input type="email" id="email" name="email" size="70" placeholder="abc@example.com">
+                <br> 若有新留言，請寄電子郵件至：
+                <input type="email" id="email" name="email" size="70" placeholder=" abc@example.com">
                 <br>
                 <!-- <input type="submit"> -->
                 <!-- <button type="button" id="btn-addNewEvent" class="btn btn-primary">Add new Event</button> -->

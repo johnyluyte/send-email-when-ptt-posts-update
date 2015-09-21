@@ -31,7 +31,7 @@ function createJsonData(myForm){
       在這個例子中，包含
       "check_ptt_url":
       "check_hour_period":
-      "check_total_days":
+      "check_persist_days":
       "email":
     */
     data = myForm.serialize() + "&" + $.param(data);
@@ -57,10 +57,11 @@ function sendAjax(data){
         "<br />article_board: " + data["article_board"] +
         "<br />article_date: " + data["article_date"] +
         "<br />check_ptt_url: " + data["check_ptt_url"] +
-        "<br />check_hour_period: " + data["check_hour_period"] +
-        "<br />check_total_days: " + data["check_total_days"] +
+        "<br />check_period: " + data["check_period"] +
+        "<br />check_persist_days: " + data["check_persist_days"] +
         "<br />email: " + data["email"] +
-        "<br />article_last_push: " + data["article_last_push"]
+        "<br />article_last_push: " + data["article_last_push"] +
+        "<br />message: " + data["message"]
       );
 
       // alert("Form submitted successfully.\nReturned json: " + data["json"]);
