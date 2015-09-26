@@ -6,7 +6,7 @@ if (is_ajax()) {
   if (isset($_POST["action"]) && !empty($_POST["action"])) { //Checks if action value exists
     $action = $_POST["action"];
     switch($action) { //Switch case for value of action
-      case "action_check_ptt": mainJob(); break;
+      case "action_check_ptt": main_job(); break;
     }
   }
 }
@@ -26,6 +26,10 @@ function get_url_content($url){
   curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
   curl_setopt($handle, CURLINFO_HEADER_OUT, true);
 
+  // 即使遇到轉址也不會出錯
+  curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
+  // 跳過 "PTT 本網站已依網站內容分級規定處理 確認已經滿 18 歲" 的畫面
+  curl_setopt($handle, CURLOPT_COOKIE, 'over18=1');
   /* Get the HTML or whatever is linked in $url. */
   $response = curl_exec($handle);
 
@@ -67,10 +71,30 @@ function get_next_article_metadata($content, $start_from){
   return substr($content, $posValueStart, ($posValueEnd - $posValueStart) );
 }
 
+function fetch_meta_data($content){
+  // 抓出 PTT 文章的作者、看板、標題、時間
+  $posMetaDataStart = strpos($content, "main-content");
+  $content = substr($content, $posMetaDataStart);
+  $author = get_next_article_metadata($content, 0);
+  $board = get_next_article_metadata($content, strpos($content, $author));
+  $title = get_next_article_metadata($content, strpos($content, $board));
+  $published_date = get_next_article_metadata($content, strpos($content, $title));
 
-function mainJob(){
-  $url = $_POST["check_ptt_url"];
+  // 抓出最後一篇推文
+  $postLastPushStart = strrpos($content, "push-content") + 16;
+  $postLastPushEnd = strrpos($content, "</span><span", $postLastPushStart);
+  $last_push = substr($content, $postLastPushStart, ($postLastPushEnd-$postLastPushStart) );
 
+  $return = $_POST;
+  $return["title"] = $title;
+  $return["author"] = $author;
+  $return["board"] = $board;
+  $return["published_date"] = $published_date;
+  $return["last_push"] = $last_push;
+  return $return;
+}
+
+function main_job(){
   /*
     如果沒有 404 的話，$content 的內容會是「整個 HTML」
     e.g.
@@ -81,43 +105,17 @@ function mainJob(){
         <meta name="robots" content="all" />
         ...
   */
-  $content = get_url_content($url);
+  $content = get_url_content($_POST["url"]);
+
   if($content=="false"){
-    // TODO echo alert when 404
-    echo json_encode(array('error' => 'An error occurred when parsing the url. (404 page not found)'));
-    return;
+    $return_json["extra_message"] = "An error occurred when parsing the url. (404 page not found)";
+  }else{
+    $return_json = fetch_meta_data($content);
+    $return_json["extra_message"] = save_to_database($return_json);
   }
 
-  // 抓出 PTT 文章的作者、看板、標題、時間
-  $posMetaDataStart = strpos($content, "main-content");
-  $content = substr($content, $posMetaDataStart);
-  $article_author = get_next_article_metadata($content, 0);
-  $article_board = get_next_article_metadata($content, strpos($content, $article_author));
-  $article_title = get_next_article_metadata($content, strpos($content, $article_board));
-  $article_date = get_next_article_metadata($content, strpos($content, $article_title));
-
-  // 抓出最後一篇推文
-  $postLastPushStart = strrpos($content, "push-content") + 16;
-  $postLastPushEnd = strrpos($content, "</span><span", $postLastPushStart);
-  $article_last_push = substr($content, $postLastPushStart, ($postLastPushEnd-$postLastPushStart) );
-
-  // 建立回傳的 JSON 物件
-  $return = $_POST;
-  $return["article_author"] = $article_author;
-  $return["article_board"] = $article_board;
-  $return["article_title"] = $article_title;
-  $return["article_date"] = $article_date;
-  $return["article_last_push"] = $article_last_push;
-
-  $return["add_date"] = $article_last_push;
-
-  $return["message"] = save_to_database($return);
-
-  // 回傳 AJAX
-  echo json_encode($return);
-
-  // TODO: 存到 Database 裡面
-
+  // 以 AJAX 回傳結果給 client 端
+  echo json_encode($return_json);
 }
 
 
@@ -138,20 +136,22 @@ function save_to_database($data){
     $conn->exec("SET NAMES 'utf8';");
     $debug_message = "Connected successfully";
 
+    // http://www.w3schools.com/php/php_mysql_prepared_statements.asp
+    // $stmt = $conn->prepare("INSERT INTO main_table (url, title, author, board, published_date, period, email, last_check, remaining, last_push) VALUES (:url, :title, :author, :board, :published_date, :period, :email, :last_check, :remaining, :last_push)");
+
     $sql =
     "INSERT INTO main_table (url, title, author, board, published_date, period, email, last_check, remaining, last_push)
       VALUES ('" .
-        $data['check_ptt_url'] ."', '" .
-        $data['article_title'] . "',  '" .
-        $data['article_author'] . "',  '" .
-        $data['article_board'] . "',  '" .
-        $data['article_date'] . "',  '" .
-        // $data[''] . "',  '" .
-        $data['check_period'] . "',  '" .
+        $data['url'] ."', '" .
+        $data['title'] . "',  '" .
+        $data['author'] . "',  '" .
+        $data['board'] . "',  '" .
+        $data['published_date'] . "',  '" .
+        $data['period'] . "',  '" .
         $data['email'] . "',  '" .
-        $data['None'] . "',  '" .
-        $data['check_persist_days'] . "',  '" .
-        $data['article_last_push'] . "')";
+        'None' . "',  '" .
+        $data['remaining'] . "',  '" .
+        $data['last_push'] . "')";
 
     // use exec() because no results are returned
     $conn->exec($sql);
