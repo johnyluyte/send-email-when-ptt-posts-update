@@ -59,7 +59,7 @@ function sendAjax(data){
         "<br />" + data["period"] +
         "<br />" + data["email"] +
         "<br />" + data["remaining"] +
-        "<br />" + data["last_push"] +
+        "<br />" + data["push_count"] +
         "<br />" + data["extra_message"]
       );
       // alert("Form submitted successfully.\nReturned json: " + data["json"]);

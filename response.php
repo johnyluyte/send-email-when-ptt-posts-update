@@ -80,17 +80,18 @@ function fetch_meta_data($content){
   $title = get_next_article_metadata($content, strpos($content, $board));
   $published_date = get_next_article_metadata($content, strpos($content, $title));
 
-  // 抓出最後一篇推文
-  $postLastPushStart = strrpos($content, "push-content") + 16;
-  $postLastPushEnd = strrpos($content, "</span><span", $postLastPushStart);
-  $last_push = substr($content, $postLastPushStart, ($postLastPushEnd-$postLastPushStart) );
+  // 抓出最後一個推文
+  // $postLastPushStart = strrpos($content, "push-content") + 16;
+  // $postLastPushEnd = strrpos($content, "</span><span", $postLastPushStart);
+  // $last_push = substr($content, $postLastPushStart, ($postLastPushEnd-$postLastPushStart) );
 
   $return = $_POST;
   $return["title"] = $title;
   $return["author"] = $author;
   $return["board"] = $board;
   $return["published_date"] = $published_date;
-  $return["last_push"] = $last_push;
+  // 改抓推文數，能達到相同效果，且不會受到相同推文的影響
+  $return["push_count"] = substr_count($content, "push-content");
   return $return;
 }
 
@@ -140,7 +141,7 @@ function save_to_database($data){
     // $stmt = $conn->prepare("INSERT INTO main_table (url, title, author, board, published_date, period, email, last_check, remaining, last_push) VALUES (:url, :title, :author, :board, :published_date, :period, :email, :last_check, :remaining, :last_push)");
 
     $sql =
-    "INSERT INTO main_table (url, title, author, board, published_date, period, email, last_check, remaining, last_push)
+    "INSERT INTO main_table (url, title, author, board, published_date, period, email, last_check, remaining, push_count)
       VALUES ('" .
         $data['url'] ."', '" .
         $data['title'] . "',  '" .
@@ -151,7 +152,7 @@ function save_to_database($data){
         $data['email'] . "',  '" .
         'None' . "',  '" .
         $data['remaining'] . "',  '" .
-        $data['last_push'] . "')";
+        $data['push_count'] . "')";
 
     // use exec() because no results are returned
     $conn->exec($sql);

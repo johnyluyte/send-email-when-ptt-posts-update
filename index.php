@@ -58,7 +58,7 @@
             echo '</td><td>將通知寄至</td><td>' . $row['email'];
             echo '</td></tr><tr><td>發文日期</td><td>' . $row['published_date'];
             echo '</td><td>上次檢查</td><td>' . $row['last_check'];
-            echo '</td></tr><tr><td>最後推文</td><td colspan="3">' . $row['last_push'];
+            echo '</td></tr><tr><td>最後推文</td><td colspan="3">' . $row['push_count'];
             echo '</td></tr></table></div></div>';
           }
         ?>
