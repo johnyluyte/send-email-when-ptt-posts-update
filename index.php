@@ -12,6 +12,9 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
+          <div id="the-return" class="alert alert-dismissible alert-success">
+              <!-- [HTML is replaced when successful.] -->
+          </div>
 
         <!-- 目前現有的資料(從資料庫讀取) -->
         <?php
@@ -45,21 +48,18 @@
             echo '<button class="btn btn-danger btn-xs">刪除這筆資料</button>';
             echo '&nbsp;&nbsp;&nbsp;';
             echo '<a target="_blank" href="' . $row['url'] . '">' . $row['url'] . '</a>';
-            echo '</div><div class="panel-body"><div class="row"><div class="col-md-4">';
-            echo '標題：' . $row['title'];
-            echo '<br> 作者：' . $row['author'];
-            echo '<br> 看板：' . $row['board'];
-            echo '<br> 發文日期：' . $row['published_date'];
-            echo '<br></div><div class="col-md-4">';
-            echo '加入日期：' . $row['add_date'];
-            echo '<br> 距離停止檢查尚餘：' . $row['remaining'] . ' 天';
-            echo '<br> 每隔多久檢查是否有新留言：' . $row['period'] . ' 小時';
-            echo '<br> 將新留言通知寄至：' . $row['email'];
-            echo '<br></div><div class="col-md-4">';
-            echo '上次檢查：' . $row['last_check'];
-            echo '<br><br><button class="btn btn-info btn-sm">立即檢查是否有新留言</button><br></div></div><hr>';
-            echo '最新推文：' . $row['last_push'];
-            echo '<br></div></div>';
+            echo '</div><div class="panel-body"><table class="table table-bordered">';
+
+            echo '<tr><td class="col-md-1">標題</td><td class="col-md-4">' . $row['title'];
+            echo '</td><td class="col-md-1">加入日期</td><td class="col-md-6">' . $row['add_date'];
+            echo '</td></tr><tr><td>作者</td><td>' . $row['author'];
+            echo '</td><td>檢查截止</td><td> 剩 ' . $row['remaining'] . ' 天';
+            echo '</td></tr><tr><td>看板</td><td>' . $row['board'];
+            echo '</td><td>將通知寄至</td><td>' . $row['email'];
+            echo '</td></tr><tr><td>發文日期</td><td>' . $row['published_date'];
+            echo '</td><td>上次檢查</td><td>' . $row['last_check'];
+            echo '</td></tr><tr><td>最後推文</td><td colspan="3">' . $row['last_push'];
+            echo '</td></tr></table></div></div>';
           }
         ?>
 
@@ -72,35 +72,39 @@
               <a target="_blank" href="https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html</a>
             </div>
             <div class="panel-body">
-              <div class="row">
-                <div class="col-md-4">
-                  標題：Re: [心情] 外貌很重要
-                  <br> 作者：mrp (小生)
-                  <br> 看板：Boy-Girl
-                  <br> 發文日期：Thu Jan 22 21:10:38 2015
-                  <br>
-                </div>
-
-                <div class="col-md-4">
-                  加入日期：Thu Jan 22 21:10:38 2015
-                  <br> 距離停止檢查尚餘：7 天
-                  <br> 每隔多久檢查是否有新留言：1 小時
-                  <br> 將新留言通知寄至：johnyluyte@gmail.com
-                  <br>
-                </div>
-
-                <div class="col-md-4">
-                  上次檢查：Thu Jan 22 21:10:38 2015
-                  <br>
-                  <br>
-                  <button class="btn btn-info btn-sm">立即檢查是否有新留言</button>
-                  <br>
-                </div>
-              </div>
-              <hr>
-              最後推文：好好喔~~<br>
+              <table class="table table-bordered table-hover">
+                <tr>
+                  <td class="col-md-1">標題</td>
+                  <td class="col-md-4">Re: [心情] 外貌很重要</td>
+                  <td class="col-md-1">加入日期</td>
+                  <td class="col-md-6">2015-09-25 22:38:22</td>
+                </tr>
+                <tr>
+                  <td>作者</td>
+                  <td>mrp (小生)</td>
+                  <td>檢查截止</td>
+                  <td>剩下 7 天</td>
+                </tr>
+                <tr>
+                  <td>看板</td>
+                  <td>Boy-Girl</td>
+                  <td>將通知寄至</td>
+                  <td>johnyluyte@gmail.com</td>
+                </tr>
+                <tr>
+                  <td>發文日期</td>
+                  <td>Thu Jan 22</td>
+                  <td>上次檢查</td>
+                  <td>Thu Jan 24</td>
+                </tr>
+                <tr>
+                  <td >最後推文</td>
+                  <td colspan="3">推 sunshine5566: 這是最後一篇推文最後一篇推文最後一篇推文最後一篇推文最後一篇推文最後一篇推文</td>
+                </tr>
+              </table>
             </div>
         </div>
+
 
         <!-- 新增新的一筆資料 -->
         <div class="panel panel-default">
@@ -111,18 +115,17 @@
               <form id="myForm" method="post" accept-charset="utf-8">
                 <label class="control-label" for="inputDefault">新增批踢踢文章網址：</label>
                 <!-- <input type="text" class="form-control" id="inputDefault" placeholder="例如：https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html"> -->
-                <input type="text" id="check_ptt_url" name="check_ptt_url" size="70" placeholder=" https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">
+                <input type="text" id="url" name="url" size="70" placeholder=" https://www.ptt.cc/bbs/Boy-Girl/M.1421932242.A.CAF.html">
                 <br>
                 <label class="control-label" for="inputDefault">每隔</label>
-                <select style="color:black" id="select" name="check_period">
+                <select style="color:black" id="select" name="period">
                   <option>1</option>
-                  <option>6</option>
                   <option>12</option>
                   <option>24</option>
                 </select>
                 小時檢查一次該文章是否有新留言，
                 <label class="control-label" for="inputDefault">持續：</label>
-                <select style="color:black" id="select" name="check_persist_days">
+                <select style="color:black" id="select" name="remaining">
                   <option>1</option>
                   <option>3</option>
                   <option>5</option>
@@ -140,8 +143,8 @@
             </div>
         </div>
 
-        <div id="the-return" class="alert alert-dismissible alert-success">
-            [HTML is replaced when successful.]
+        <div id="div_info">
+          <button id="btn_check_now" class="btn btn-info btn-lg">立即檢查是否有新留言</button>
         </div>
 
       </div>

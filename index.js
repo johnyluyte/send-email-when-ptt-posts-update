@@ -51,19 +51,17 @@ function sendAjax(data){
         return;
       }
       $("#the-return").html(
-        // data
-        "<br />article_title: " + data["article_title"] +
-        "<br />article_author: " + data["article_author"] +
-        "<br />article_board: " + data["article_board"] +
-        "<br />article_date: " + data["article_date"] +
-        "<br />check_ptt_url: " + data["check_ptt_url"] +
-        "<br />check_period: " + data["check_period"] +
-        "<br />check_persist_days: " + data["check_persist_days"] +
-        "<br />email: " + data["email"] +
-        "<br />article_last_push: " + data["article_last_push"] +
-        "<br />message: " + data["message"]
+        "<br />" + data["url"] +
+        "<br />" + data["title"] +
+        "<br />" + data["author"] +
+        "<br />" + data["board"] +
+        "<br />" + data["published_date"] +
+        "<br />" + data["period"] +
+        "<br />" + data["email"] +
+        "<br />" + data["remaining"] +
+        "<br />" + data["last_push"] +
+        "<br />" + data["extra_message"]
       );
-
       // alert("Form submitted successfully.\nReturned json: " + data["json"]);
     }
   });
@@ -73,7 +71,7 @@ function sendAjax(data){
 $("document").ready(function(){
   $("#myForm").submit(function(event){
 
-    if(isValidPttURL($("#check_ptt_url").val())==false)
+    if(isValidPttURL($("#url").val())==false)
       return;
 
     if(isEmailNotEmpty($("#email").val())==false)
@@ -84,6 +82,12 @@ $("document").ready(function(){
     // https://api.jquery.com/submit/
     // return false;  would does the same as event.preventDefault();
     event.preventDefault();
+  });
+
+  $(".btn.btn-danger.btn-xs").click(function(event){
+    if(confirm("確定要刪除這筆資料嗎？")){
+      $(this).parent().parent().remove();
+    }
   });
 });
 
