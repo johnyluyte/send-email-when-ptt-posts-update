@@ -11,6 +11,7 @@
 <body>
   <div class="container">
 
+    <div id="div_show_rows">
     <!-- 目前現有的資料(從資料庫讀取) -->
     <?php
       $db_configs_json = file_get_contents("db_config.json");
@@ -58,6 +59,7 @@
       }
     ?>
 
+    <!-- 範例版面
     <div class="panel panel-default">
         <div class="panel-heading">
           <button class="btn btn-danger btn-xs">刪除這筆資料</button>
@@ -95,7 +97,9 @@
           </table>
         </div>
     </div>
+    -->
 
+    </div>
     <hr>
 
     <!-- 新增新的一筆資料 -->
@@ -111,18 +115,12 @@
             <br>
             <label class="control-label" for="inputDefault">每隔</label>
             <select style="color:black" id="select" name="period">
-              <option>1</option>
-              <option>12</option>
               <option>24</option>
             </select>
             小時檢查一次該文章是否有新留言，
             <label class="control-label" for="inputDefault">持續：</label>
             <select style="color:black" id="select" name="remaining">
-              <option>1</option>
-              <option>3</option>
-              <option>5</option>
-              <option>7</option>
-              <option>14</option>
+              <option>31</option>
             </select>
             天。
             <br> 若有新留言，請寄電子郵件至：

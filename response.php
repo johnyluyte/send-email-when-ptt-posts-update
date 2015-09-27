@@ -6,7 +6,8 @@ if (is_ajax()) {
   if (isset($_POST["action"]) && !empty($_POST["action"])) { //Checks if action value exists
     $action = $_POST["action"];
     switch($action) { //Switch case for value of action
-      case "action_check_ptt": main_job(); break;
+      case "action_add": add_job(); break;
+      case "action_delete": delete_job(); break;
     }
   }
 }
@@ -41,7 +42,7 @@ function get_url_content($url){
   $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
   if($httpCode == 404) {
       /* Handle 404 here. */
-      return "false";
+      return null;
   }
 
   /*switch($httpCode) {
@@ -95,7 +96,7 @@ function fetch_meta_data($content){
   return $return;
 }
 
-function main_job(){
+function add_job(){
   /*
     如果沒有 404 的話，$content 的內容會是「整個 HTML」
     e.g.
@@ -108,7 +109,7 @@ function main_job(){
   */
   $content = get_url_content($_POST["url"]);
 
-  if($content=="false"){
+  if($content==null){
     $return_json["extra_message"] = "An error occurred when parsing the url. (404 page not found)";
   }else{
     $return_json = fetch_meta_data($content);
@@ -135,7 +136,7 @@ function save_to_database($data){
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->exec("SET NAMES 'utf8';");
-    $debug_message = "Connected successfully";
+    // $debug_message = "Connected successfully";
 
     // http://www.w3schools.com/php/php_mysql_prepared_statements.asp
     // $stmt = $conn->prepare("INSERT INTO main_table (url, title, author, board, published_date, period, email, last_check, remaining, last_push) VALUES (:url, :title, :author, :board, :published_date, :period, :email, :last_check, :remaining, :last_push)");
@@ -156,7 +157,7 @@ function save_to_database($data){
 
     // use exec() because no results are returned
     $conn->exec($sql);
-    $debug_message = "New record created successfully";
+    $debug_message = "新增完成。";
 
     }
   catch(PDOException $e)
@@ -169,5 +170,51 @@ function save_to_database($data){
 
   return $debug_message;
 }
+
+function delete_job(){
+  $url = $_POST["url"];
+  $return_json = array(
+    'url' => $url,
+    'extra_message' => delete_from_database($url)
+  );
+  echo json_encode($return_json);
+}
+
+function delete_from_database($url){
+  $db_configs_json = file_get_contents("db_config.json");
+  $db_configs      = json_decode($db_configs_json, true);
+  $servername      = $db_configs['servername'];
+  $dbname          = $db_configs['dbname'];
+  $username        = $db_configs['username'];
+  $password        = $db_configs['password'];
+
+  $debug_message = "";
+  try {
+    // Open a Connection to MySQL
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn->exec("SET NAMES 'utf8';");
+    $debug_message = "Connected successfully";
+
+    $sql = "DELETE FROM `main_table` WHERE `url`=:url";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':url', $url);
+    $stmt->execute();
+
+    $debug_message = "刪除完成。";
+
+    }
+  catch(PDOException $e)
+    {
+    $debug_message = "Connection failed: " . $e->getMessage();
+    }
+
+  // Close the Connection
+  $conn = null;
+
+  return $debug_message;
+}
+
 
 ?>
