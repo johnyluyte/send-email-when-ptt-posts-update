@@ -92,7 +92,7 @@ function send_notify_email($mail_receiver, $mail_message){
   $Subject = '您在 PTT 追蹤的文章有新的推文';
   $Message = $mail_message;
   // http://stackoverflow.com/questions/7266935/how-to-send-utf-8-email
-  $from_name = "自動檢查PTT推文";
+  $from_name = "PTT推文更新";
   $Headers = "From: =?utf-8?B?" . base64_encode($from_name) . "?=  \r\n" .
   "Reply-To: no-reply@chunnorris.cc \r\n" .
   "Content-type: text/html; charset=UTF-8 \r\n";
